@@ -1,0 +1,49 @@
+
+.container{
+    display: grid;
+    grid-template-columns: repeat(4,100px);
+    gap:20px;
+    align-items: center;
+    justify-content: center;
+    
+
+
+}
+.card{
+    width: 100px;
+    height: 100px;
+    background-color: #011323;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 50px;
+}
+#title{
+    text-align: center;
+    color: #011323;
+    font-size: 50px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+#reset{
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #69012b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#winner,#message{
+    text-align: center;
+    color: #69012b;
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
