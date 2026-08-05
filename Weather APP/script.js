@@ -1,4 +1,4 @@
-let input=document.getElementById("searchInput");
+let input=document.getElementById("search");
 let searchButton=document.getElementById("searchbtn");
 let cityName=document.getElementById("cityName");
 let forecast =document.getElementById("forecast");
