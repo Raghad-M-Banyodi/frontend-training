@@ -54,6 +54,7 @@ async function getCoordinates(cityName){
      const response= await fetch(url);
      if(!response.ok){
         alert("City not found")
+        input.value="";
         reset();
         return;
      }
