@@ -1,14 +1,16 @@
 let input=document.getElementById("search");
-let searchButton=document.getElementById("searchbtn");
+let searchButton=document.getElementById("searchBtn");
 let cityName=document.getElementById("cityName");
 let forecast =document.getElementById("forecast");
-let unit ="metric";
 let unitBtn =document.getElementById("unitBtn");
-let lastCity = "";
-let lastLat;
-let lastLon;
 
- window.onload = getLocation;
+
+let unit ="metric";
+let currentCityName = "";
+let currentLat;
+let currentLon;
+
+window.onload = getLocation;
 
 searchButton.addEventListener("click",handelClick); 
 
@@ -21,12 +23,14 @@ input.addEventListener("keydown",function(event){
 
 
 function handelClick(){
-    
-    let city = input.value;
+   currentCityName = input.value.trim();
+    if(currentCityName==""){
+        alert("try agin");
+        input.value="";
+    }else{
+     getCoordinates(currentCityName);
 
-    lastCity = city;
-
-    getWeather(city);
+    }
 
 }
 unitBtn.addEventListener("click", function () {
@@ -39,51 +43,64 @@ unitBtn.addEventListener("click", function () {
         unitBtn.textContent = "Switch to °F";
     }
    
-   
-   if (lastCity) {
-    getWeather(lastCity);
-   } else {
-    getWeatherByLocation(lastLat, lastLon);
-  }
+    getWeather(currentLat, currentLon);
+
 
 });
 
-async function getWeatherByLocation(lat,lon){
-const url=`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIkey}&units=${unit}`;
- try {
-        const response = await fetch(url);
-        if (!response.ok) {
-             reset();
-            alert("Location not found");
-            return;
-        }
-         await response.json();
-          
-         getForecast(lat, lon);
-    } catch (error) {
-        reset();
-        console.error("Error fetching data:", error);
-    }
-
-
-}
-async function getWeather(city) {
-    
-    const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}&units=${unit}`;
+async function getCoordinates(cityName){
+    let url= `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIkey}&units=${unit}`;
     try{
      const response= await fetch(url);
      if(!response.ok){
+        alert("City not found")
         reset();
-        alert("City not found");
-        
         return;
      }
      const data= await response.json();
+     currentLat=data.coord.lat;
+     currentLon=data.coord.lon;
+     getWeather(currentLat,currentLon);
    
-     getForecast(data.coord.lat, data.coord.lon);
      input.value="";
 
     } catch(error){
+         reset();
+
+     alert("Error fetching data")
+   }
+
+
+}
+async function getWeather(lat,lon) {
+    let APIUrl= `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}&units=${unit}`;
+   
+    try{
+     const response= await fetch( APIUrl);
+
+    if(response.status === 200){
+     const data = await response.json();
+    displayForecast(data);
+    input.value="";
+
+   } else if(response.status === 404){
+
+    reset();
+    alert("City not found");
+
+   } else if(response.status === 401){
+
+    alert("Invalid API key");
+
+   } else if(response.status === 500){
+
+    alert("Server error");
+
+   } else {
+
+    alert("Unknown error: " + response.status);
+
+   } } catch(error){
          reset();
 
      alert("Error fetching data")
@@ -93,12 +110,14 @@ async function getWeather(city) {
 function  getLocation(){
 
     navigator.geolocation.getCurrentPosition((possition)=>{
-        let lat=possition.coords.latitude;
-        let lon=possition.coords.longitude;
-            lastLat = lat;
-            lastLon = lon;
-        getWeatherByLocation(lat,lon);
+        currentLat=possition.coords.latitude;
+        currentLon=possition.coords.longitude;
+       
+        getWeather(currentLat,currentLon);
 
+    },
+    (error) => {
+        alert("Location access denied");
     });
     
  }
@@ -112,25 +131,7 @@ function reset(){
 
 
 }
-async function getForecast(lat, lon) {
-    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIkey}&units=${unit}`;
 
-    try {
-        const response = await fetch(url);
-
-        if (!response.ok) {
-            console.log("Forecast not found");
-            return;
-        }
-
-        const data = await response.json();
-
-        displayForecast(data);
-
-    } catch (error) {
-        console.error(error);
-        }
-}
 
 function displayForecast(data) {
 
