@@ -1,26 +1,31 @@
+
+import {  useState } from "react";
 interface SearchProps {
-    setCity: (city: string) => void;
-    handleSearch: () => void;
+  
+    handleSearch: (city: string) => void;
 }
 
-function Search({
-    setCity,
-    handleSearch,
-}: SearchProps) {
+function Search({ handleSearch}: SearchProps) {
+    const [value, setValue] = useState("");
+    function onKeyDown(event:any){
+         if (event.key === "Enter") {
+                        handleSearch(value);
+                        setValue("");
+                    }
+
+
+    }
     return (
         <div>
             <input
                 id="search"
                 placeholder="your city"
-                onChange={(event) => setCity(event.target.value)}
-                onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                        handleSearch();
-                    }
-                }}
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+                onKeyDown={(event) =>  onKeyDown(event)}
             />
 
-            <button onClick={handleSearch}>
+            <button onClick={()=>handleSearch(value)}>
                 Search
             </button>
         </div>

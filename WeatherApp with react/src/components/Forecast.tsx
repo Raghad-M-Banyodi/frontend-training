@@ -4,15 +4,19 @@ import type { ForecastData } from "../types/weather";
 interface ForecastProps {
     forecast: ForecastData;
     unit: "C" | "F";
-    convertTemperature: (temperature: number) => number;
+
 }
 
-function Forecast({
-    forecast,
-    unit,
-    convertTemperature,
-}: ForecastProps) {
-    
+
+function Forecast({ forecast, unit }: ForecastProps) {
+    const convertTemperature = (temperature: number) => {
+        if (unit === "F") {
+            return (temperature * 9) / 5 + 32;
+        }
+
+        return temperature;
+    };
+
     const dailyForecast = forecast.list.filter((item) =>
         item.dt_txt.includes("12:00:00")
     );
@@ -25,7 +29,7 @@ function Forecast({
                 {dailyForecast.map((item) => (
                     <ForecastCard
                         key={item.dt_txt}
-                        date={item.dt_txt.split(" ")[0]}
+                        date={item.dt_txt}
                         temperature={convertTemperature(item.main.temp)}
                         description={item.weather[0].description}
                         icon={item.weather[0].icon}
