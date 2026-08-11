@@ -1,68 +1,52 @@
-
 body {
-    min-height: 100vh;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    padding-top: 30px;
+  min-height: 100vh;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding-top: 30px;
 }
-label{
-    color:#1e3a5f
+label {
+  color: #1e3a5f;
 }
-
-
 
 #title {
-    color: #1e3a5f;
-    margin-bottom: 25px;
+  color: #1e3a5f;
+  margin-bottom: 25px;
 }
-
-
 
 #search {
-    padding: 10px;
-    width: 200px;
-    border: 1px solid #aaa;
-    border-radius: 8px;
-    font-size: 15px;
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  font-size: 15px;
 }
-
-
 
 button {
-    padding: 10px 10px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 12px;
-    background-color: #3b82f6;
-    color: white;
+  padding: 10px 10px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  background-color: #3b82f6;
+  color: white;
 }
-
-
-
-
-
 
 #unitBtn {
-    display: block;
-    margin: 15px auto;
-    background-color: #8b4513;
+  display: block;
+  margin: 15px auto;
+  background-color: #8b4513;
 }
-
 
 #cityName {
-    color: #333;
-    margin: 20px;
+  color: #333;
+  margin: 20px;
 }
-
-
 
 #forecast {
-    display: grid;
-    grid-template-columns: repeat(3, 180px);
-    gap: 20px;
-    justify-content: center;
-    margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 180px);
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
 }
-

@@ -1,25 +1,26 @@
-
-import { useEffect, useState } from "react";
-import "./App.css";
-import Forecast from "./components/Forecast";
-import { getCoordinates, getForecast } from "./services/weatherService";
-import type { ForecastData } from "./types/weather";
-import Search from "./components/Search";
+import { useEffect, useState } from 'react';
+import './App.css';
+import Forecast from './components/Forecast';
+import { getCoordinates, getForecast } from './services/weatherService';
+import type { ForecastData } from './types/weather';
+import Search from './components/Search';
 
 function App() {
-  
   const [forecast, setForecast] = useState<ForecastData | null>(null);
-  const [unit, setUnit] = useState<"C" | "F">("C");
-  const [error, setError] = useState("");
+  const [unit, setUnit] = useState<'C' | 'F'>('C');
+  const [error, setError] = useState('');
 
   const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         try {
-          setError("");
+          setError('');
 
-          const data = await getForecast(position.coords.latitude, position.coords.longitude);
- 
+          const data = await getForecast(
+            position.coords.latitude,
+            position.coords.longitude,
+          );
+
           setForecast(data);
         } catch (error) {
           if (error instanceof Error) {
@@ -28,8 +29,8 @@ function App() {
         }
       },
       () => {
-        setError("Location access denied");
-      }
+        setError('Location access denied');
+      },
     );
   };
 
@@ -37,64 +38,51 @@ function App() {
     getLocation();
   }, []);
 
-  const handleSearch = async (city: string)=> {
-    if (city.trim() === "") {
-      setError("Please enter a city");
-      city="";
+  const handleSearch = async (city: string) => {
+    if (city.trim() === '') {
+      setError('Please enter a city');
+
       return;
     }
 
     try {
-      setError("");
+      setError('');
 
       const coordinates = await getCoordinates(city.trim());
 
-      const data = await getForecast( coordinates.lat, coordinates.lon );
+      const data = await getForecast(coordinates.lat, coordinates.lon);
 
       setForecast(data);
-      city="";
     } catch (error) {
       setForecast(null);
-      city="";
 
       if (error instanceof Error) {
         setError(error.message);
       } else {
-        setError("Error fetching data");
+        setError('Error fetching data');
       }
     }
   };
 
-
-
   const changeUnit = () => {
-    setUnit(unit === "C" ? "F" : "C");
+    setUnit(unit === 'C' ? 'F' : 'C');
   };
 
   return (
     <div>
       <h1 id="title">Welcome to our Weather app</h1>
 
-      <Search
-        handleSearch={handleSearch}
-      />
+      <Search handleSearch={handleSearch} />
 
       <button id="unitBtn" onClick={changeUnit}>
-        {unit === "C" ? "Switch to °F" : "Switch to °C"}
+        {unit === 'C' ? 'Switch to °F' : 'Switch to °C'}
       </button>
 
       {error && <p>{error}</p>}
 
-      {forecast && (
-        <Forecast
-          forecast={forecast}
-          unit={unit}
-       
-        />
-      )}
+      {forecast && <Forecast forecast={forecast} unit={unit} />}
     </div>
   );
-
 }
 
 export default App;

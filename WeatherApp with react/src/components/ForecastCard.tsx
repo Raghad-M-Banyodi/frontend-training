@@ -3,11 +3,16 @@ interface ForecastCardProps {
   temperature: number;
   description: string;
   icon: string;
-  unit: "C" | "F";
+  unit: 'C' | 'F';
 }
 
-const ForecastCard = ({date,temperature,description, icon,unit}: ForecastCardProps) => {
-
+const ForecastCard = ({
+  date,
+  temperature,
+  description,
+  icon,
+  unit,
+}: ForecastCardProps) => {
   return (
     <div className="card">
       <h3>{date}</h3>
