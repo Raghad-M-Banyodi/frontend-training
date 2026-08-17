@@ -1,17 +1,14 @@
-import {
-  useState,
-  type Dispatch,
-  type SetStateAction,
-  type KeyboardEvent,
-} from 'react';
+import { useState, type KeyboardEvent } from 'react';
+
 interface Task {
   id: number;
   text: string;
   completed: boolean;
 }
+
 interface AddTaskProps {
   tasksList: Task[];
-  setTasks: Dispatch<SetStateAction<Task[]>>;
+  setTasks: (tasks: Task[]) => void;
 }
 
 function AddTask({ tasksList, setTasks }: AddTaskProps) {
@@ -45,6 +42,7 @@ function AddTask({ tasksList, setTasks }: AddTaskProps) {
       handleAddTask();
     }
   }
+
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="flex items-center justify-center gap-3">
@@ -55,7 +53,7 @@ function AddTask({ tasksList, setTasks }: AddTaskProps) {
             placeholder="New task..."
             value={taskText}
             onChange={(event) => setTaskText(event.target.value)}
-            onKeyDown={(event) => onKeyDown(event)}
+            onKeyDown={onKeyDown}
           />
 
           <button
@@ -71,4 +69,5 @@ function AddTask({ tasksList, setTasks }: AddTaskProps) {
     </div>
   );
 }
+
 export default AddTask;

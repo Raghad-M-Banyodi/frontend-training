@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 
 interface Task {
   id: number;
@@ -8,7 +7,7 @@ interface Task {
 
 interface DeleteAllTaskProps {
   tasksList: Task[];
-  setTasks: Dispatch<SetStateAction<Task[]>>;
+  setTasks: (tasks: Task[]) => void;
 }
 
 function DeleteAllTask({ tasksList, setTasks }: DeleteAllTaskProps) {

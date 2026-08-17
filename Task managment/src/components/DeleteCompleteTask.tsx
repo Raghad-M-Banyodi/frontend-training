@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
-
 interface Task {
   id: number;
   text: string;
@@ -8,7 +6,7 @@ interface Task {
 
 interface DeleteCompleteTaskProps {
   tasksList: Task[];
-  setTasks: Dispatch<SetStateAction<Task[]>>;
+   setTasks: (tasks: Task[]) => void;
 }
 function DeleteCompleteTask({ tasksList, setTasks }: DeleteCompleteTaskProps) {
   function handleDeleteCompleteTask() {

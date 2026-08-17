@@ -8,7 +8,7 @@ interface Task {
 
 interface TaskCardProps {
   tasksList: Task[];
-  setTasks: Dispatch<SetStateAction<Task[]>>;
+  setTasks: (tasks: Task[]) => void;
 }
 
 function TaskCard({ tasksList, setTasks }: TaskCardProps) {
