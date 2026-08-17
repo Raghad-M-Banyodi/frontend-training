@@ -1,28 +1,31 @@
 import { useState, type KeyboardEvent } from 'react';
-
-interface Task {
-  id: number;
-  text: string;
-  completed: boolean;
-}
+import type { Task } from '../types/task';
 
 interface AddTaskProps {
   tasksList: Task[];
   setTasks: (tasks: Task[]) => void;
+  saveTasks: (tasks: Task[]) => void;
 }
 
-function AddTask({ tasksList, setTasks }: AddTaskProps) {
+function AddTask({
+  tasksList,
+  setTasks,
+  saveTasks,
+}: AddTaskProps) {
   const [taskText, setTaskText] = useState('');
   const [error, setError] = useState('');
 
   function addNewTask() {
-    const newTask = {
+    const newTask: Task = {
       id: Date.now(),
       text: taskText,
       completed: false,
     };
 
-    setTasks([...tasksList, newTask]);
+    const updatedTasks = [...tasksList, newTask];
+
+    setTasks(updatedTasks);
+    saveTasks(updatedTasks);
   }
 
   function handleAddTask() {
