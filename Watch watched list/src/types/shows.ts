@@ -4,12 +4,12 @@ export interface Show {
   image: {
     medium: string;
     original: string;
-  } | null;
+  } | undefined;
   genres: string[];
   status: string;
   language: string;
   rating: {
-    average: number | null;
+    average: number | undefined;
   };
-  premiered: string | null;
+  premiered: string | undefined;
 }

@@ -7,14 +7,8 @@ import ShowList from './componants/ShowList';
 function App() {
   const [shows, setShows] = useState<Show[]>([]);
   const [search, setSearch] = useState('');
-  const [visibleShowsCount, setVisibleShowsCount] = useState(10);
-  const [visibleWatchedCount, setVisibleWatchedCount] = useState(10);
-
-  const [watchedShows, setWatchedShows] = useState<Show[]>(() => {
-    const savedWatchedShow = localStorage.getItem('watchedShows');
-
-    return savedWatchedShow ? JSON.parse(savedWatchedShow) : [];
-  });
+  const [page, setPage] = useState(0);
+  const [watchedShows, setWatchedShows] = useState<Show[]>([]);
 
   const filteredShows = shows.filter(
     (show) =>
@@ -26,58 +20,41 @@ function App() {
     show.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const visibleShows = filteredShows.slice(0, visibleShowsCount);
-
-  const visibleWatchedShows = filteredWatchedShows.slice(
-    0,
-    visibleWatchedCount,
-  );
-
-  function saveWatchedShows(shows: Show[]) {
-    localStorage.setItem('watchedShows', JSON.stringify(shows));
-  }
-
   function addToWatched(show: Show) {
     setWatchedShows((prev) => {
       if (prev.some((item) => item.id === show.id)) {
         return prev;
       }
 
-      const updatedShows = [...prev, show];
-
-      saveWatchedShows(updatedShows);
-
-      return updatedShows;
+      return [...prev, show];
     });
   }
 
   function removeFromWatchedList(show: Show) {
-    setWatchedShows((prev) => {
-      const updatedShows = prev.filter((item) => item.id !== show.id);
-
-      saveWatchedShows(updatedShows);
-
-      return updatedShows;
-    });
+    setWatchedShows((prev) =>
+      prev.filter((item) => item.id !== show.id),
+    );
   }
 
   function loadMoreShows() {
-    setVisibleShowsCount((prev) => prev + 10);
-  }
-
-  function loadMoreWatched() {
-    setVisibleWatchedCount((prev) => prev + 10);
+    setPage((prev) => prev + 1);
   }
 
   useEffect(() => {
-    getShows()
+    getShows(page)
       .then((data) => {
-        setShows(data);
+        setShows((prev) => {
+          const newShows = data.filter(
+            (show) => !prev.some((item) => item.id === show.id),
+          );
+
+          return [...prev, ...newShows];
+        });
       })
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -86,22 +63,15 @@ function App() {
       <div className="grid grid-cols-2 gap-8">
         <ShowList
           title="Watch List"
-          shows={visibleShows}
+          shows={filteredShows}
           onAdd={addToWatched}
-          onRemove={removeFromWatchedList}
-          isWatched={false}
           onLoadMore={loadMoreShows}
-          hasMore={visibleShows.length < filteredShows.length}
         />
 
         <ShowList
           title="Watched List"
-          shows={visibleWatchedShows}
-          onAdd={addToWatched}
+          shows={filteredWatchedShows}
           onRemove={removeFromWatchedList}
-          isWatched={true}
-          onLoadMore={loadMoreWatched}
-          hasMore={visibleWatchedShows.length < filteredWatchedShows.length}
         />
       </div>
     </div>
